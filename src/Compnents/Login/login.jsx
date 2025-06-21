@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import logo from '../../assets/Logo Smart.png';
+import { Link } from 'react-router-dom';
+
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -102,9 +104,9 @@ export default function Login() {
 
         <p className="mt-10 text-center text-sm text-gray-500" style={{ color: '#808080' }}>
           Don't have any account yet{' '}
-          <a href="#" className="font-semibold hover:text-indigo-500" style={{ color: '#C20A0A' }}>
-            Create Account
-          </a>
+          <Link to="/register" className="font-semibold hover:text-indigo-500" style={{ color: '#C20A0A' }}>
+  Create Account
+</Link>
         </p>
       </div>
     </div>
