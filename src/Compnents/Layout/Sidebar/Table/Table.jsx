@@ -1,9 +1,14 @@
-import React from 'react';
+import BookingHeader from "./BookingHeader";
+import TableSection from "./TableSection";
+import TableSelect from "./TableSelect";
 
-export default function Tables() {
+export default function YourPage() {
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold text-gray-700">Tables Page</h1>
+    <div className="p-6">
+      <BookingHeader />
+      <TableSection/>
+   
+     
     </div>
   );
 }
