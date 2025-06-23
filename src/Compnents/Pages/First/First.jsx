@@ -10,13 +10,7 @@ export default function First() {
       <div className="p-6">
         <Cards />
 
-        <div className="mt-8 text-gray-700 text-center">
-          <p>
-            This is the content of your first page with the custom header and
-            sidebar.
-          </p>
         </div>
       </div>
-    </div>
   );
 }
