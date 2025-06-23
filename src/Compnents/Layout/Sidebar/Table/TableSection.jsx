@@ -4,10 +4,11 @@ import axios from "axios";
 
 export default function TableSection() {
   const [showPopup, setShowPopup] = useState(false);
-  const [selectedPlace, setSelectedPlace] = useState("");
-  const [selectedType, setSelectedType] = useState("");
+  const [selectedPlace, setSelectedPlace] = useState(""); // indoor / outdoor
   const [tableNumber, setTableNumber] = useState("");
   const [tables, setTables] = useState([]);
+  const [popupPlace, setPopupPlace] = useState("");
+  const [popupType, setPopupType] = useState("");
 
   const fetchTables = async () => {
     try {
@@ -29,12 +30,12 @@ export default function TableSection() {
   };
 
   const handleAddTable = async () => {
-    if (!tableNumber || !selectedType) return;
+    if (!tableNumber || !popupType) return;
 
     try {
       const response = await axios.post("http://localhost:3000/api/v1/table", {
         number: parseInt(tableNumber),
-        location: selectedType,
+        location: popupType,
       });
 
       const newTable = {
@@ -49,8 +50,8 @@ export default function TableSection() {
 
       setShowPopup(false);
       setTableNumber("");
-      setSelectedPlace("");
-      setSelectedType("");
+      setPopupPlace("");
+      setPopupType("");
     } catch (error) {
       if (
         error.response &&
@@ -66,7 +67,7 @@ export default function TableSection() {
 
   return (
     <div className="p-6 relative">
-      {/* Header + Add Button */}
+      {/* ✅ الفلاتر فوق */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-black">Choose Table</h1>
 
@@ -101,11 +102,11 @@ export default function TableSection() {
                 <div className="flex gap-4">
                   <button
                     onClick={() => {
-                      setSelectedPlace("first");
-                      setSelectedType("");
+                      setPopupPlace("first");
+                      setPopupType("");
                     }}
                     className={`px-4 py-2 rounded-md border border-[#246FA8] transition ${
-                      selectedPlace === "first"
+                      popupPlace === "first"
                         ? "bg-[#246FA8] text-white"
                         : "bg-white text-[#246FA8] hover:bg-[#246FA8] hover:text-white"
                     }`}
@@ -114,11 +115,11 @@ export default function TableSection() {
                   </button>
                   <button
                     onClick={() => {
-                      setSelectedPlace("second");
-                      setSelectedType("");
+                      setPopupPlace("second");
+                      setPopupType("");
                     }}
                     className={`px-4 py-2 rounded-md border border-[#246FA8] transition ${
-                      selectedPlace === "second"
+                      popupPlace === "second"
                         ? "bg-[#246FA8] text-white"
                         : "bg-white text-[#246FA8] hover:bg-[#246FA8] hover:text-white"
                     }`}
@@ -128,16 +129,16 @@ export default function TableSection() {
                 </div>
               </div>
 
-              {selectedPlace && (
+              {popupPlace && (
                 <div className="mb-4">
                   <span className="block text-[#246FA8] font-medium mb-2">
                     Choose Type
                   </span>
                   <div className="flex gap-4">
                     <button
-                      onClick={() => setSelectedType("inside")}
+                      onClick={() => setPopupType("inside")}
                       className={`px-4 py-2 rounded-md border border-[#246FA8] transition ${
-                        selectedType === "inside"
+                        popupType === "inside"
                           ? "bg-[#246FA8] text-white"
                           : "bg-white text-[#246FA8] hover:bg-[#246FA8] hover:text-white"
                       }`}
@@ -145,9 +146,9 @@ export default function TableSection() {
                       Indoor
                     </button>
                     <button
-                      onClick={() => setSelectedType("outside")}
+                      onClick={() => setPopupType("outside")}
                       className={`px-4 py-2 rounded-md border border-[#246FA8] transition ${
-                        selectedType === "outside"
+                        popupType === "outside"
                           ? "bg-[#246FA8] text-white"
                           : "bg-white text-[#246FA8] hover:bg-[#246FA8] hover:text-white"
                       }`}
@@ -164,8 +165,8 @@ export default function TableSection() {
                   onClick={() => {
                     setShowPopup(false);
                     setTableNumber("");
-                    setSelectedPlace("");
-                    setSelectedType("");
+                    setPopupPlace("");
+                    setPopupType("");
                   }}
                 >
                   Cancel
@@ -182,17 +183,49 @@ export default function TableSection() {
         </div>
       </div>
 
-   
+      {/* ✅ فلاتر مكان العرض */}
+      <div className="flex gap-4 mb-6">
+        <button
+          onClick={() => setSelectedPlace("inside")}
+          className={`px-4 py-2 rounded-md border border-[#246FA8] transition ${
+            selectedPlace === "inside"
+              ? "bg-[#246FA8] text-white"
+              : "bg-white text-[#246FA8] hover:bg-[#246FA8] hover:text-white"
+          }`}
+        >
+          Indoor
+        </button>
+        <button
+          onClick={() => setSelectedPlace("outside")}
+          className={`px-4 py-2 rounded-md border border-[#246FA8] transition ${
+            selectedPlace === "outside"
+              ? "bg-[#246FA8] text-white"
+              : "bg-white text-[#246FA8] hover:bg-[#246FA8] hover:text-white"
+          }`}
+        >
+          Outdoor
+        </button>
+        <button
+          onClick={() => setSelectedPlace("")}
+          className="px-4 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 transition"
+        >
+          Show All
+        </button>
+      </div>
+
+      {/* ✅ عرض التربيزات المفلترة */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
-        {tables.map((table) => (
-          <div
-            key={table._id}
-            className="flex items-center justify-center h-32 border-4 rounded-md text-xl font-bold"
-            style={{ borderColor: getStatusColor(table.isAvailable) }}
-          >
-            Table {table.number}
-          </div>
-        ))}
+        {tables
+          .filter((table) => !selectedPlace || table.location === selectedPlace)
+          .map((table) => (
+            <div
+              key={table._id}
+              className="flex items-center justify-center h-32 border-4 rounded-md text-xl font-bold"
+              style={{ borderColor: getStatusColor(table.isAvailable) }}
+            >
+              Table {table.number}
+            </div>
+          ))}
       </div>
 
       {/* ✅ كروت الحالة */}
@@ -215,13 +248,6 @@ export default function TableSection() {
     </div>
   );
 }
-
-
-
-
-
-
-
 
 
 
