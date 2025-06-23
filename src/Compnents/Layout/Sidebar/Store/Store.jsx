@@ -1,9 +1,15 @@
-import React from 'react';
+import React from "react";
+import Header from "../../../Header/Header";
+import Cards from "../../../Cards/Cards";
 
 export default function Store() {
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold text-gray-700">Store Page</h1>
+      <Header />
+       <div className="p-6">
+              <Cards />
+      
+              </div>
     </div>
   );
 }
