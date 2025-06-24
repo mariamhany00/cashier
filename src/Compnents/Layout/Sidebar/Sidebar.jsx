@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export default function Sidebar() {
+  
   return (
     <div className="fixed top-0 left-[13px] w-[260px] h-[1032px] bg-white text-gray-800 pt-[30px] pb-[30px] px-[43px]">
       <h2
